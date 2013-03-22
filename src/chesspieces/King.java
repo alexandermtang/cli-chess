@@ -27,7 +27,9 @@ public class King extends ChessPiece {
 		}
 		
 		// same code as Queen; King is a noob Queen
-		if ((dx != 0 && dy != 0) && (Math.abs(dy/dx) != 1.0)) {
+		// if ((dx != 0 && dy != 0) && (Math.abs(dy/dx) != 1.0)) {
+			
+		if (!(dx == 0 || dy == 0 || Math.abs(dy/dx) == 1.0)) {
 			return false;
 		}
 		

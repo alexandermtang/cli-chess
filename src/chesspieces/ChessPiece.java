@@ -93,7 +93,11 @@ public abstract class ChessPiece {
 	protected int getDir(double dx, double dy) {
 		int dir = -1;
 		
-		// add additional filter Math.abs(dy/dx) == 1
+		// if not straight or diagonal, return -1
+		if (!(dx == 0 || dy == 0 || Math.abs(dy/dx) == 1.0)) {
+			return dir;
+		}
+		
 			 if (dx == 0 && dy >  0) { dir = NORTH;     } 
 		else if (dx >  0 && dy == 0) { dir = EAST;      } 
 		else if (dx == 0 && dy <  0) { dir = SOUTH;     }
@@ -102,6 +106,7 @@ public abstract class ChessPiece {
 		else if (dx >  0 && dy <  0) { dir = SOUTHEAST; }
 		else if (dx <  0 && dy <  0) { dir = SOUTHWEST; }
 		else if (dx <  0 && dy >  0) { dir = NORTHWEST; }
+			 
 		return dir;
 	}
 	

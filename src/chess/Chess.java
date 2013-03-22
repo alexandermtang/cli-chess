@@ -31,11 +31,11 @@ public class Chess {
 				// if piece is a King and has no possible moves and is under check, checkmate
 				if (king.possibleMoves().isEmpty()) {
 					String color = turn == 'w' ? "Black" : "White";
-					System.out.println("Checkmate, " + color + " wins");
+					System.out.println("Checkmate\n" + color + " wins");
 					return;
 				}
 				
-				System.out.println("Check!");
+				System.out.println("Check");
 			}
 		
 			System.out.print(turn == 'w' ? "White's move: " : "Black's move: ");
