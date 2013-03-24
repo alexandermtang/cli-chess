@@ -22,16 +22,14 @@ public class King extends ChessPiece {
 			// castle logic
 		}
 		
+		// king can move in radius of 1
 		if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
 			return false;
 		}
 		
 		// same code as Queen; King is a noob Queen
-		// if ((dx != 0 && dy != 0) && (Math.abs(dy/dx) != 1.0)) {
-			
-		if (!(dx == 0 || dy == 0 || Math.abs(dy/dx) == 1.0)) {
-			return false;
-		}
+		// not necessary??? bc king can only move 1 space
+		if (getDir(from, to) == -1) { return false; }
 		
 		return super.canMoveTo(to) && !inCheckAt(to);
 	}
@@ -45,17 +43,19 @@ public class King extends ChessPiece {
 	
 	// checks if King would be in check at any given Position pos
 	public boolean inCheckAt(Position pos) {
-		char color = super.getColor();
-		ChessBoard board = super.getBoard();
+		char color = getColor();
+		ChessBoard board = getBoard();
 		boolean inCheck = false;
 		
 		// delete king from board to see if pieces can move past it
 		King king = this;
-		board.deletePieceAt(super.getPos());
+		board.deletePieceAt(getPos());
 		
+		// check entire board to see if any opp color piece can move to pos
 		for(int y = 7; y >= 0; y--) {
 			for(int x = 0; x < 8; x++) {
 				Position curr = new Position(x,y);
+				
 				if (board.hasPieceAt(curr)) {
 					ChessPiece piece = board.getPieceAt(curr);
 					
@@ -68,8 +68,8 @@ public class King extends ChessPiece {
 							break;
 						}
 						
-						// if a piece already exists at pos, 
-						// remove existing piece and see if opp piece can move there
+						// if a piece already exists at pos, remove existing piece 
+						// (to simulate king moving there) and see if opp piece can move there
 						if (board.hasPieceAt(pos)) {
 							ChessPiece temp = board.getPieceAt(pos);
 							board.deletePieceAt(pos);

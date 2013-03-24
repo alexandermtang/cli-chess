@@ -39,17 +39,19 @@ public abstract class ChessPiece {
 	}
 	
 	// checks if piece is allowed to move to this position
-	// returns true if piece are different colors or if nothing exists at dest
 	public boolean canMoveTo(Position dest) {
-		/*
+		
+		// if moving piece means putting your king in check, return false;
 		King king = board.getKing(getColor());
-		ChessPiece temp = board.getPieceAt(pos);
-		board.deletePieceAt(pos);
+		ChessPiece curr = this;
+		board.deletePieceAt(getPos());
 		if (king.inCheckAt(king.getPos())) {
-			board.putPiece(temp, pos);
+			board.putPiece(curr, curr.getPos());
 			return false;
 		}
-		board.putPiece(temp, pos);*/
+		board.putPiece(curr, curr.getPos());
+			
+		// returns true if piece are different colors or if nothing exists at dest
 		return board.hasPieceAt(dest) ? board.getPieceAt(dest).getColor() != color : true;
 	}
 	
@@ -82,16 +84,20 @@ public abstract class ChessPiece {
 		double dx = (double)to.getX() - from.getX();
 		double dy = (double)to.getY() - from.getY();
 		
+		// if same no change in position, return false
 		if (dx == 0 && dy == 0) { return false; }
 		
-		int dir = getDir(dx,dy);
+		int dir = getDir(from, to);
 		Position next = getNextPos(from, dir);
 		
 		return recursiveTravel(to, next, dir);
 	}
 	
-	protected int getDir(double dx, double dy) {
+	protected int getDir(Position from, Position to) {
 		int dir = -1;
+		
+		double dx = (double)to.getX() - from.getX();
+		double dy = (double)to.getY() - from.getY();
 		
 		// if not straight or diagonal, return -1
 		if (!(dx == 0 || dy == 0 || Math.abs(dy/dx) == 1.0)) {
@@ -108,17 +114,6 @@ public abstract class ChessPiece {
 		else if (dx <  0 && dy >  0) { dir = NORTHWEST; }
 			 
 		return dir;
-	}
-	
-	// recursively travels from curr to dest
-	private boolean recursiveTravel(Position dest, Position curr, int dir) {	
-		if (dest.equals(curr)) { return true; }
-		if (!Position.validPos(curr.getX(), curr.getY())) { return false; }
-		if (getBoard().hasPieceAt(curr))  { return false; }
-		
-		Position next = getNextPos(curr, dir);
-		
-		return recursiveTravel(dest, next, dir);
 	}
 	
 	// gets adjacent or diagonal position one spot away from curr depending on dir 
@@ -139,6 +134,16 @@ public abstract class ChessPiece {
 		return next;
 	}
 	
+	// recursively travels from curr to dest
+	private boolean recursiveTravel(Position dest, Position curr, int dir) {	
+		if (dest.equals(curr)) { return true; }
+		if (!Position.validPos(curr.getX(), curr.getY())) { return false; }
+		if (getBoard().hasPieceAt(curr))  { return false; }
+		
+		Position next = getNextPos(curr, dir);
+		
+		return recursiveTravel(dest, next, dir);
+	}
 	public abstract String toString();
 	
 	public boolean equals(Object o) {

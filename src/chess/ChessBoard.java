@@ -37,7 +37,7 @@ public class ChessBoard {
 		board[0][0] = new Rook  (this, 'w', new Position(0,0));
 		board[1][0] = new Knight(this, 'w', new Position(1,0));
 		board[2][0] = new Bishop(this, 'w', new Position(2,0));
-		board[4][4] = new Queen (this, 'w', new Position(4,4));
+		board[1][4] = new Queen (this, 'w', new Position(1,4));
 		board[4][0] = wK;
 		board[5][0] = new Bishop(this, 'w', new Position(5,0));
 		board[6][0] = new Knight(this, 'w', new Position(6,0));

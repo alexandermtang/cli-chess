@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import util.CheckException;
@@ -89,7 +90,7 @@ public class Chess {
 			} catch (CheckException e) {
 				System.err.println(e.getMessage());
 				continue;
-			} 
+			}
 			
 			// changes turns
 			turn = turn == 'w' ? 'b' : 'w';
@@ -101,7 +102,12 @@ public class Chess {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		runGame();
+		try {
+			runGame();
+		} catch (NoSuchElementException e) {
+			// used for EOF
+			System.exit(0);
+		}
 	}
 
 }

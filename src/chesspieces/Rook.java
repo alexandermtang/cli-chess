@@ -12,10 +12,7 @@ public class Rook extends ChessPiece {
 	public boolean canMoveTo(Position to) {
 		Position from = getPos();
 		
-		double dx = (double)to.getX() - from.getX();
-		double dy = (double)to.getY() - from.getY();
-		
-		int dir = getDir(dx, dy);
+		int dir = getDir(from, to);
 		
 		// if not n,e,s,w, return false
 		if (dir != NORTH &&

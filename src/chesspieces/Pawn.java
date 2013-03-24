@@ -41,7 +41,7 @@ public class Pawn extends ChessPiece {
 			return false;
 		}
 		
-		int dir = getDir(dx, dy);
+		int dir = getDir(from, to);
 		// if White, dir must be NORTH
 		if (color == 'w' && dir != NORTH) {
 			return false;

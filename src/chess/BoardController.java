@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.ArrayList;
+
 import util.CheckException;
 import util.IllegalMoveException;
 import util.PieceNotFoundException;
@@ -38,7 +40,7 @@ public class BoardController {
 		}
 		
 		if (from.equals(to)) {
-			throw new IllegalMoveException("Piece was not moved\n" + possibleMovesToString(piece));
+			throw new IllegalMoveException("Piece was not moved\n" + possibleMovesToString(from, piece.possibleMoves()));
 		}
 		
 		// check if King of current turn player is in check
@@ -49,16 +51,17 @@ public class BoardController {
 			if (!piece.equals(king)) {
 				StringBuilder sb = new StringBuilder();
 				sb.append(king + " is in check at " + king.getPos() + "\n");
-				sb.append(possibleMovesToString(king));
+				sb.append(possibleMovesToString(king.getPos(), king.possibleMoves()));
 				throw new CheckException(sb.toString());
 			}
 		}
 		
 		if (!piece.canMoveTo(to)) {
-			
  			// get all possible moves and throw IllegalMoveException
+			ArrayList<Position> possibleMoves = piece.possibleMoves();
+			
 			String message = piece + " at " + from + " cannot move to " + to + "\n" +
-					possibleMovesToString(piece);
+					possibleMovesToString(from, possibleMoves);
 			
 			throw new IllegalMoveException(message);
 		}
@@ -66,11 +69,10 @@ public class BoardController {
 		piece.move(to);
 	}
 	
-	private String possibleMovesToString(ChessPiece piece) {
-		Position from = piece.getPos();
+	private String possibleMovesToString(Position from, ArrayList<Position> possibleMoves) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Possible Moves:");
-		for (Position p : piece.possibleMoves()) {
+		for (Position p : possibleMoves) {
 			sb.append("\n" + from + " " + p);
 		}
 		return sb.toString();
