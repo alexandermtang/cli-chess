@@ -20,8 +20,9 @@ public class Chess {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		// FIX END GAME REQUIREMENTS
-		boolean draw = false;
+		boolean proposeDraw = false;
+		char playerProposingDraw = 'w';
+		char requestedPromotionPiece = 'Q';
 		
 		while (true) {
 			System.out.println(board);
@@ -35,7 +36,6 @@ public class Chess {
 					System.out.println("Checkmate\n" + color + " wins");
 					return;
 				}
-				
 				System.out.println("Check");
 			}
 		
@@ -49,23 +49,22 @@ public class Chess {
 				return;
 			}
 			
-			// FIX DRAW LOGIC
-			if (draw && inputs[0].equals("draw")) {
-				return;
-			} else {
-				draw = false;
-			}
+			// if it is playerProposingDraw's turn again, set proposeDraw to false
+			if (playerProposingDraw == turn){ proposeDraw = false; }
+			
+			// check if draw was proposed on last turn
+			if (proposeDraw && playerProposingDraw != turn && inputs[0].equals("draw"))  { return; }
 			
 			if (inputs.length > 2) {
 				String s = inputs[2];
 				
 				// check if player wants a draw
 				if (s.equals("draw?")) {
-					draw = true;
-					break;
+					proposeDraw = true;
+					playerProposingDraw = turn;
+				} else {
+					requestedPromotionPiece = s.charAt(0);
 				}
-				
-				// promotePiece logic
 			}
 			
 			try {

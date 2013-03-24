@@ -5,16 +5,7 @@ import java.util.ArrayList;
 import util.Position;
 import chess.ChessBoard;
 
-public abstract class ChessPiece {
-
-	protected final int NORTH     = 0;
-	protected final int EAST      = 1;
-	protected final int SOUTH     = 2;
-	protected final int WEST      = 3;
-	protected final int NORTHEAST = 4;
-	protected final int SOUTHEAST = 5;
-	protected final int SOUTHWEST = 6;
-	protected final int NORTHWEST = 7;
+public abstract class ChessPiece implements ChessConstants {
 	
 	private ChessBoard board;
 	private char color;
@@ -43,8 +34,7 @@ public abstract class ChessPiece {
 		
 		// if moving piece means putting your king in check, return false;
 		King king = board.getKing(getColor());
-		ChessPiece curr = this;
-		board.deletePieceAt(getPos());
+		ChessPiece curr = board.deletePieceAt(getPos());
 		if (king.inCheckAt(king.getPos())) {
 			board.putPiece(curr, curr.getPos());
 			return false;
@@ -144,6 +134,7 @@ public abstract class ChessPiece {
 		
 		return recursiveTravel(dest, next, dir);
 	}
+	
 	public abstract String toString();
 	
 	public boolean equals(Object o) {

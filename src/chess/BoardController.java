@@ -40,7 +40,8 @@ public class BoardController {
 		}
 		
 		if (from.equals(to)) {
-			throw new IllegalMoveException("Piece was not moved\n" + possibleMovesToString(from, piece.possibleMoves()));
+			throw new IllegalMoveException("Piece was not moved\n" + 
+					possibleMovesToString(from, piece.possibleMoves()));
 		}
 		
 		// check if King of current turn player is in check
@@ -58,10 +59,8 @@ public class BoardController {
 		
 		if (!piece.canMoveTo(to)) {
  			// get all possible moves and throw IllegalMoveException
-			ArrayList<Position> possibleMoves = piece.possibleMoves();
-			
 			String message = piece + " at " + from + " cannot move to " + to + "\n" +
-					possibleMovesToString(from, possibleMoves);
+					possibleMovesToString(from, piece.possibleMoves());
 			
 			throw new IllegalMoveException(message);
 		}
@@ -69,17 +68,7 @@ public class BoardController {
 		piece.move(to);
 	}
 	
-	private String possibleMovesToString(Position from, ArrayList<Position> possibleMoves) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Possible Moves:");
-		for (Position p : possibleMoves) {
-			sb.append("\n" + from + " " + p);
-		}
-		return sb.toString();
-	}
-	
 	public void promotePiece(Position pos, char pieceChar) {
-		
 		char color = board.getPieceAt(pos).getColor();
 		ChessPiece newPiece;
 		switch (pieceChar) {
@@ -97,5 +86,14 @@ public class BoardController {
 		
 		board.deletePieceAt(pos);
 		board.putPiece(newPiece, pos);
+	}
+	
+	private String possibleMovesToString(Position from, ArrayList<Position> possibleMoves) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Possible Moves:");
+		for (Position p : possibleMoves) {
+			sb.append("\n" + from + " " + p);
+		}
+		return sb.toString();
 	}
 }

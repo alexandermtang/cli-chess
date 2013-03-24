@@ -37,7 +37,7 @@ public class ChessBoard {
 		board[0][0] = new Rook  (this, 'w', new Position(0,0));
 		board[1][0] = new Knight(this, 'w', new Position(1,0));
 		board[2][0] = new Bishop(this, 'w', new Position(2,0));
-		board[1][4] = new Queen (this, 'w', new Position(1,4));
+		board[3][0] = new Queen (this, 'w', new Position(3,0));
 		board[4][0] = wK;
 		board[5][0] = new Bishop(this, 'w', new Position(5,0));
 		board[6][0] = new Knight(this, 'w', new Position(6,0));
@@ -60,17 +60,19 @@ public class ChessBoard {
 		return board[x][y];
 	}
 	
-	public void deletePieceAt(Position pos) {
+	public ChessPiece deletePieceAt(Position pos) {
+		ChessPiece deleted = getPieceAt(pos);
 		int x = pos.getX(); 
 		int y = pos.getY();
 		board[x][y] = null;
+		return deleted;
 	}
 	
 	public void putPiece(ChessPiece piece, Position pos) {
 		int x = pos.getX(); 
 		int y = pos.getY();
 		board[x][y] = piece;
-		piece.setPos(pos);
+		if (piece != null) { piece.setPos(pos); }
 	}
 	
 	public King getKing(char c) {
