@@ -25,10 +25,10 @@ public class King extends ChessPiece {
 				boolean res = !inCheckWhileCastling(to) && canCastle && rook.canCastle();
 				return res && super.canMoveTo(to) && !inCheckAt(to);
 			}
-		} 
+		}
 		
+		// king can only move in radius of 1
 		if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-			// king can only move in radius of 1
 			return false;
 		}
 		
@@ -51,6 +51,7 @@ public class King extends ChessPiece {
 		Rook rook = null;
 		if (board.hasPieceAt(pos)) {
 			ChessPiece piece = board.getPieceAt(pos);
+			// piece must be a rook and of same color as king
 			if (piece instanceof Rook && piece.getColor() == getColor()) {
 				rook = (Rook)piece;
 			}

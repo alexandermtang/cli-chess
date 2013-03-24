@@ -23,7 +23,7 @@ public class BoardController {
 		this.board = board;
 	}
  
-	public void movePiece(Position from, Position to, char turn) 
+	public void movePiece(Position from, Position to, char turn, char requestedPromotionPiece) 
 	throws IllegalMoveException, PieceNotFoundException, 
 		   WrongTurnException, CheckException {
 		// check if piece actually exists at from
@@ -66,26 +66,14 @@ public class BoardController {
 		}
 		
 		piece.move(to);
-	}
-	
-	public void promotePiece(Position pos, char pieceChar) {
-		char color = board.getPieceAt(pos).getColor();
-		ChessPiece newPiece;
-		switch (pieceChar) {
-		case 'R': newPiece = new Rook  (board, color, pos);
-				  break;
-		case 'N': newPiece = new Knight(board, color, pos);
-				  break;
-		case 'B': newPiece = new Bishop(board, color, pos);
-				  break;
-		case 'p': newPiece = new Pawn  (board, color, pos);
-				  break;
-		default : newPiece = new Queen (board, color, pos);
-			      break;
-		}
 		
-		board.deletePieceAt(pos);
-		board.putPiece(newPiece, pos);
+		// checks for promoting a pawn
+		if (piece instanceof Pawn) {
+			Pawn pawn = (Pawn)piece;
+			if (pawn.inLastRow()) {
+				pawn.promote(requestedPromotionPiece);
+			}
+		}
 	}
 	
 	private String possibleMovesToString(Position from, ArrayList<Position> possibleMoves) {

@@ -50,10 +50,11 @@ public class Chess {
 			}
 			
 			// if it is playerProposingDraw's turn again, set proposeDraw to false
-			if (playerProposingDraw == turn){ proposeDraw = false; }
+			if (playerProposingDraw == turn) { proposeDraw = false; }
+			
 			
 			// check if draw was proposed on last turn
-			if (proposeDraw && playerProposingDraw != turn && inputs[0].equals("draw"))  { return; }
+			if (proposeDraw && playerProposingDraw != turn && inputs[0].equals("draw")) { return; }
 			
 			if (inputs.length > 2) {
 				String s = inputs[2];
@@ -70,7 +71,7 @@ public class Chess {
 			try {
 				Position from = Position.parsePos(inputs[0]);
 				Position to = Position.parsePos(inputs[1]);
-				bc.movePiece(from, to, turn);
+				bc.movePiece(from, to, turn, requestedPromotionPiece);
 			} catch (WrongTurnException e) {
 				System.err.println(e.getMessage());
 				continue;

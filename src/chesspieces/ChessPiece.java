@@ -32,7 +32,7 @@ public abstract class ChessPiece implements ChessConstants {
 	// checks if piece is allowed to move to this position
 	public boolean canMoveTo(Position dest) {
 		
-		// if moving piece means putting your king in check, return false;
+		// if moving piece means putting your king in check, return false
 		King king = board.getKing(getColor());
 		ChessPiece curr = board.deletePieceAt(getPos());
 		if (king.inCheckAt(king.getPos())) {
