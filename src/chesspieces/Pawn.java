@@ -3,6 +3,7 @@ package chesspieces;
 import util.Position;
 import chess.ChessBoard;
 
+// en passant still doesnt work, but oh well
 public class Pawn extends ChessPiece {
 
 	private boolean firstTurn;
@@ -18,7 +19,7 @@ public class Pawn extends ChessPiece {
 		int x0 = from.getX();
 		int y0 = from.getY();
 			
-		double dx = (double)to.getX() - from.getX();
+		//double dx = (double)to.getX() - from.getX();
 		double dy = (double)to.getY() - from.getY();
 		
 		ChessBoard board = getBoard();
@@ -73,8 +74,8 @@ public class Pawn extends ChessPiece {
 	
 	public void promote(char pieceChar) {
 		ChessBoard board = getBoard();
-		Position pos = getPos();
 		char color = getColor();
+		Position pos = getPos();
 		ChessPiece newPiece;
 		
 		switch (pieceChar) {
@@ -96,13 +97,13 @@ public class Pawn extends ChessPiece {
 	
 	// returns true if pawn moved to last row on board
 	public boolean inLastRow() {
-		boolean res = false;
+		boolean inLastRow = false;
 		int y = getColor() == 'w' ? 7 : 0;
 		for (int x = 0; x < 8; x++) {
-			res = res || getPos().equals(new Position(x,y));
+			inLastRow = inLastRow || getPos().equals(new Position(x,y));
 		}
 		
-		return res;
+		return inLastRow;
 	}
 
 	public String toString() {

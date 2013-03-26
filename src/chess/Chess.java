@@ -59,7 +59,10 @@ public class Chess {
 			if (playerProposingDraw == turn) { proposeDraw = false; }
 			
 			// check if draw was proposed on last turn
-			if (proposeDraw && playerProposingDraw != turn && inputs[0].equals("draw")) { return; }
+			if (proposeDraw && playerProposingDraw != turn && inputs[0].equals("draw")) { 
+				System.out.println("Draw");
+				return; 
+			}
 			
 			if (inputs.length > 2) {
 				String s = inputs[2];

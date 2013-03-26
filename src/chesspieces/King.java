@@ -128,8 +128,7 @@ public class King extends ChessPiece {
 		return inCheck;
 	}
 	
-	// stalemate if king is not in check but if king moves, will be in check
-	// also no pieces of same color can move
+	// stalemate if king is not in check and no pieces (including king) of same color can move
 	public boolean inStalemate() {
 		boolean noPiecesCanMove = true;
 		for (ChessPiece piece : getBoard().getAllPieces()) {
