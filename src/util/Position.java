@@ -23,7 +23,7 @@ public class Position {
 	}
 	
 	// checks if x,y are coordinates that exist on chess board
-	public static boolean validPos(int x, int y) {
+	public static boolean isValidPos(int x, int y) {
 		return x >= 0 && x < 8 && y >= 0 && y < 8;
 	}
 	
@@ -34,7 +34,7 @@ public class Position {
 		}
 		int x = (int)(s.charAt(0)) - 97; 
 		int y = Character.getNumericValue(s.charAt(1)) - 1;
-		if (!validPos(x,y)) { 
+		if (!isValidPos(x,y)) { 
 			throw new IllegalPositionException(s + " does not exist");
 		}
 		return new Position(x,y);

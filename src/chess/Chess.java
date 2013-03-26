@@ -9,6 +9,7 @@ import util.IllegalPositionException;
 import util.PieceNotFoundException;
 import util.Position;
 import util.WrongTurnException;
+import chesspieces.ChessPiece;
 import chesspieces.King;
 
 public class Chess {
@@ -30,13 +31,22 @@ public class Chess {
 			// need to print check if king is under check
 			King king = turn == 'w' ? board.getKing('w') : board.getKing('b');
 			if (king.inCheckAt(king.getPos())) {
-				// if piece is a King and has no possible moves and is under check, checkmate
-				if (king.possibleMoves().isEmpty()) {
+				// if King has no possible moves, is under check, and no pieces can block check, checkmate
+				
+				// !!!!!!!!!!!also have to check if any other piece can move to block check
+				
+				if (king.possibleMoves().isEmpty() && king.getPiecesThatBlockCheck().isEmpty()) {
 					String color = turn == 'w' ? "Black" : "White";
 					System.out.println("Checkmate\n" + color + " wins");
 					return;
 				}
 				System.out.println("Check");
+			}
+			
+			// check for stalemate
+			if (king.inStalemate()) {
+				System.out.println("Stalemate");
+				return;
 			}
 		
 			System.out.print(turn == 'w' ? "White's move: " : "Black's move: ");
@@ -51,7 +61,6 @@ public class Chess {
 			
 			// if it is playerProposingDraw's turn again, set proposeDraw to false
 			if (playerProposingDraw == turn) { proposeDraw = false; }
-			
 			
 			// check if draw was proposed on last turn
 			if (proposeDraw && playerProposingDraw != turn && inputs[0].equals("draw")) { return; }

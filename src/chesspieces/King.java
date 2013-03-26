@@ -1,5 +1,7 @@
 package chesspieces;
 
+import java.util.ArrayList;
+
 import util.Position;
 import chess.ChessBoard;
 
@@ -86,6 +88,8 @@ public class King extends ChessPiece {
 	
 	// checks if King would be in check at any given Position pos
 	public boolean inCheckAt(Position pos) {
+		if (pos == null) { return false; }
+		
 		char color = getColor();
 		ChessBoard board = getBoard();
 		boolean inCheck = false;
@@ -130,6 +134,39 @@ public class King extends ChessPiece {
 		// replace king
 		board.putPiece(king, king.getPos());
 		return inCheck;
+	}
+	
+	// stalemate if king is not in check but if king moves, will be in check
+	public boolean inStalemate() {
+		Position pos = getPos();
+		boolean otherPiecesCannotMove = true;
+		for (ChessPiece piece : getBoard().getAllPieces()) {
+			if (piece.getColor() == getColor()) { 
+				otherPiecesCannotMove = otherPiecesCannotMove && piece.possibleMoves().isEmpty();
+			}
+		}
+		boolean stalemate = !inCheckAt(pos)  					 && otherPiecesCannotMove &&
+							inCheckAt(getNextPos(pos,NORTH))     && inCheckAt(getNextPos(pos,EAST))      &&
+							inCheckAt(getNextPos(pos,SOUTH))     && inCheckAt(getNextPos(pos,WEST))      &&
+							inCheckAt(getNextPos(pos,NORTHEAST)) && inCheckAt(getNextPos(pos,SOUTHEAST)) &&
+							inCheckAt(getNextPos(pos,SOUTHWEST)) && inCheckAt(getNextPos(pos,NORTHWEST));
+		return stalemate;
+	}
+	
+	
+	public ArrayList<ChessPiece> getPiecesThatBlockCheck() {
+		char color = getColor();
+		ChessBoard board = getBoard();
+		ArrayList<ChessPiece> pieces = new ArrayList<ChessPiece>();
+		
+		for (ChessPiece piece : board.getAllPieces()) {
+			if (piece.getColor() == color && !piece.equals(this)) {
+				for (int i = 0; i < piece.possibleMoves().size(); i++) {
+					if (!pieces.contains(piece)) { pieces.add(piece); }
+				}
+			}
+		}
+		return pieces;
 	}
 	
 	public String toString() {

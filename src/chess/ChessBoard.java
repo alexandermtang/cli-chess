@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.ArrayList;
+
 import util.Position;
 import chesspieces.Bishop;
 import chesspieces.ChessPiece;
@@ -58,6 +60,17 @@ public class ChessBoard {
 		int x = pos.getX(); 
 		int y = pos.getY();
 		return board[x][y];
+	}
+	
+	public ArrayList<ChessPiece> getAllPieces() {
+		ArrayList<ChessPiece> pieces = new ArrayList<ChessPiece>();
+		for(int y = 7; y >= 0; y--) {
+			for(int x = 0; x < 8; x++) {
+				Position curr = new Position(x,y);
+				if (hasPieceAt(curr)) { pieces.add(getPieceAt(curr)); }
+			}
+		}
+		return pieces;
 	}
 	
 	public ChessPiece deletePieceAt(Position pos) {

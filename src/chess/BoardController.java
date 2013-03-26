@@ -31,45 +31,56 @@ public class BoardController {
 			throw new PieceNotFoundException("No piece exists at " + from);
 		}
 		
-		ChessPiece piece = board.getPieceAt(from);
+		ChessPiece selectedPiece = board.getPieceAt(from);
 		
 		// check if turn matches color of piece being moved
-		if (piece.getColor() != turn) {
+		if (selectedPiece.getColor() != turn) {
 			throw new WrongTurnException("Cannot move a " + 
 					(turn == 'w' ? "Black" : "White") + " piece");
 		}
 		
 		if (from.equals(to)) {
-			throw new IllegalMoveException("Piece was not moved\n" + 
-					possibleMovesToString(from, piece.possibleMoves()));
+			throw new IllegalMoveException("Piece was not moved\nPossible moves for " + selectedPiece +  " at " + 
+					selectedPiece.getPos() + ":" + possibleMovesToString(from, selectedPiece.possibleMoves()));
 		}
 		
 		// check if King of current turn player is in check
 		King king = board.getKing(turn);
 		if (king.inCheckAt(king.getPos())) {
+			ArrayList<ChessPiece> pieces = king.getPiecesThatBlockCheck();
 			
-			// if the currently selected piece is not the king that is under check, throw exception
-			if (!piece.equals(king)) {
+			System.out.println("HELLO");
+				for (ChessPiece p : pieces) {
+					System.out.println(p + " " +p.getPos());
+				}
+			
+			// if the currently selected selectedPiece is not the king that is under check or 
+			// any piece that can block check, throw exception
+			if (!(selectedPiece.equals(king) || pieces.contains(selectedPiece))) {
 				StringBuilder sb = new StringBuilder();
-				sb.append(king + " is in check at " + king.getPos() + "\n");
+				sb.append(king + " is in check at " + king.getPos() + "\nPossible moves:");
 				sb.append(possibleMovesToString(king.getPos(), king.possibleMoves()));
+				for (ChessPiece p : pieces) {
+					sb.append(possibleMovesToString(p.getPos(), p.possibleMoves()));
+				}
 				throw new CheckException(sb.toString());
 			}
 		}
 		
-		if (!piece.canMoveTo(to)) {
+		if (!selectedPiece.canMoveTo(to)) {
  			// get all possible moves and throw IllegalMoveException
-			String message = piece + " at " + from + " cannot move to " + to + "\n" +
-					possibleMovesToString(from, piece.possibleMoves());
+			String message = selectedPiece + " at " + from + " cannot move to " + to + 
+					"\nPossible moves for " + selectedPiece + " at " + 
+					selectedPiece.getPos() + ":" + possibleMovesToString(from, selectedPiece.possibleMoves());
 			
 			throw new IllegalMoveException(message);
 		}
 		
-		piece.move(to);
+		selectedPiece.move(to);
 		
 		// checks for promoting a pawn
-		if (piece instanceof Pawn) {
-			Pawn pawn = (Pawn)piece;
+		if (selectedPiece instanceof Pawn) {
+			Pawn pawn = (Pawn)selectedPiece;
 			if (pawn.inLastRow()) {
 				pawn.promote(requestedPromotionPiece);
 			}
@@ -78,10 +89,7 @@ public class BoardController {
 	
 	private String possibleMovesToString(Position from, ArrayList<Position> possibleMoves) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Possible Moves:");
-		for (Position p : possibleMoves) {
-			sb.append("\n" + from + " " + p);
-		}
+		for (Position p : possibleMoves) { sb.append("\n" + from + " " + p); }
 		return sb.toString();
 	}
 }
