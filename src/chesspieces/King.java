@@ -94,9 +94,12 @@ public class King extends ChessPiece {
 		ChessBoard board = getBoard();
 		boolean inCheck = false;
 		
-		// delete king from board to see if pieces can move past it
-		King king = this;
-		board.deletePieceAt(getPos());
+		// put king at pos and save current piece at pos as pieceAtPos
+		Position currPos = new Position(getPos().getX(), getPos().getY());
+		ChessPiece king = board.deletePieceAt(getPos());
+		ChessPiece pieceAtPos = board.deletePieceAt(pos);
+		
+		board.putPiece(king,pos);
 		
 		// check entire board to see if any opp color piece can move to pos
 		for(int y = 7; y >= 0; y--) {
@@ -107,52 +110,35 @@ public class King extends ChessPiece {
 					ChessPiece piece = board.getPieceAt(curr);
 					
 					if (piece.getColor() != color) {
-						
 						// if a piece of opposite color can move to pos, 
 						// then king would be in check
 						if (piece.canMoveTo(pos)) {
 							inCheck =  true;
 							break;
 						}
-						
-						// if a piece already exists at pos, remove existing piece 
-						// (to simulate king moving there) and see if opp piece can move there
-						if (board.hasPieceAt(pos)) {
-							ChessPiece temp = board.deletePieceAt(pos);
-							
-							if (piece.canMoveTo(pos)) {
-								inCheck = true;
-							}
-							
-							board.putPiece(temp, pos);
-						}
 					}
 				}
 			}
 		}
 		
-		// replace king
-		board.putPiece(king, king.getPos());
+		// replace king and pieceAtPos
+		board.putPiece(pieceAtPos,pos);
+		board.putPiece(king,currPos);
+		
 		return inCheck;
 	}
 	
 	// stalemate if king is not in check but if king moves, will be in check
+	// also no pieces of same color can move
 	public boolean inStalemate() {
-		Position pos = getPos();
-		boolean otherPiecesCannotMove = true;
+		boolean noPiecesCanMove = true;
 		for (ChessPiece piece : getBoard().getAllPieces()) {
 			if (piece.getColor() == getColor()) { 
-				otherPiecesCannotMove = otherPiecesCannotMove && piece.possibleMoves().isEmpty();
+				noPiecesCanMove = noPiecesCanMove && piece.possibleMoves().isEmpty();
 			}
 		}
-		boolean stalemate = !inCheckAt(pos)  					 && otherPiecesCannotMove &&
-							inCheckAt(getNextPos(pos,NORTH))     && inCheckAt(getNextPos(pos,EAST))      &&
-							inCheckAt(getNextPos(pos,SOUTH))     && inCheckAt(getNextPos(pos,WEST))      &&
-							inCheckAt(getNextPos(pos,NORTHEAST)) && inCheckAt(getNextPos(pos,SOUTHEAST)) &&
-							inCheckAt(getNextPos(pos,SOUTHWEST)) && inCheckAt(getNextPos(pos,NORTHWEST));
-		return stalemate;
+		return !inCheckAt(getPos()) && noPiecesCanMove;
 	}
-	
 	
 	public ArrayList<ChessPiece> getPiecesThatBlockCheck() {
 		char color = getColor();

@@ -7,13 +7,9 @@ import util.IllegalMoveException;
 import util.PieceNotFoundException;
 import util.Position;
 import util.WrongTurnException;
-import chesspieces.Bishop;
 import chesspieces.ChessPiece;
 import chesspieces.King;
-import chesspieces.Knight;
 import chesspieces.Pawn;
-import chesspieces.Queen;
-import chesspieces.Rook;
 
 public class BoardController {
 	
@@ -47,20 +43,15 @@ public class BoardController {
 		// check if King of current turn player is in check
 		King king = board.getKing(turn);
 		if (king.inCheckAt(king.getPos())) {
-			ArrayList<ChessPiece> pieces = king.getPiecesThatBlockCheck();
-			
-			System.out.println("HELLO");
-				for (ChessPiece p : pieces) {
-					System.out.println(p + " " +p.getPos());
-				}
+			ArrayList<ChessPiece> piecesThatBlockCheck = king.getPiecesThatBlockCheck();
 			
 			// if the currently selected selectedPiece is not the king that is under check or 
 			// any piece that can block check, throw exception
-			if (!(selectedPiece.equals(king) || pieces.contains(selectedPiece))) {
+			if (!(selectedPiece.equals(king) || piecesThatBlockCheck.contains(selectedPiece))) {
 				StringBuilder sb = new StringBuilder();
 				sb.append(king + " is in check at " + king.getPos() + "\nPossible moves:");
 				sb.append(possibleMovesToString(king.getPos(), king.possibleMoves()));
-				for (ChessPiece p : pieces) {
+				for (ChessPiece p : piecesThatBlockCheck) {
 					sb.append(possibleMovesToString(p.getPos(), p.possibleMoves()));
 				}
 				throw new CheckException(sb.toString());

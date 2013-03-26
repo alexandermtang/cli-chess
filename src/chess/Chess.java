@@ -9,7 +9,6 @@ import util.IllegalPositionException;
 import util.PieceNotFoundException;
 import util.Position;
 import util.WrongTurnException;
-import chesspieces.ChessPiece;
 import chesspieces.King;
 
 public class Chess {
@@ -32,9 +31,6 @@ public class Chess {
 			King king = turn == 'w' ? board.getKing('w') : board.getKing('b');
 			if (king.inCheckAt(king.getPos())) {
 				// if King has no possible moves, is under check, and no pieces can block check, checkmate
-				
-				// !!!!!!!!!!!also have to check if any other piece can move to block check
-				
 				if (king.possibleMoves().isEmpty() && king.getPiecesThatBlockCheck().isEmpty()) {
 					String color = turn == 'w' ? "Black" : "White";
 					System.out.println("Checkmate\n" + color + " wins");
@@ -53,7 +49,7 @@ public class Chess {
 			String[] inputs = sc.nextLine().trim().split(" ");
 			
 			// remove "q" command later
-			if (inputs[0].equals("resign") || inputs[0].equals("q")) {
+			if (inputs[0].equals("resign")) {
 				System.out.println((turn == 'w' ? "White" : "Black") + " resigns");
 				System.out.println((turn == 'w' ? "Black" : "White") + " wins");
 				return;
