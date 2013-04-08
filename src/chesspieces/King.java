@@ -146,7 +146,7 @@ public class King extends ChessPiece {
 		
 		for (ChessPiece piece : board.getAllPieces()) {
 			if (piece.getColor() == color && !piece.equals(this)) {
-				for (int i = 0; i < piece.possibleMoves().size(); i++) {
+				if (!piece.possibleMoves().isEmpty()) {
 					if (!pieces.contains(piece)) { pieces.add(piece); }
 				}
 			}

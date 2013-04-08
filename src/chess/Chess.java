@@ -48,7 +48,6 @@ public class Chess {
 			System.out.print(turn == 'w' ? "White's move: " : "Black's move: ");
 			String[] inputs = sc.nextLine().trim().split(" ");
 			
-			// remove "q" command later
 			if (inputs[0].equals("resign")) {
 				System.out.println((turn == 'w' ? "White" : "Black") + " resigns");
 				System.out.println((turn == 'w' ? "Black" : "White") + " wins");
